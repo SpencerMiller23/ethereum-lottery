@@ -1,5 +1,16 @@
 require("@nomiclabs/hardhat-ethers")
+const { task } = require("hardhat/config");
 let secrets = require("./secrets")
+
+task("startLottery", "Starts the lottery")
+  .addPositionalParam("address", "The address of the lottery contract")
+  .setAction(async (args) => {
+    const { address } = args;
+    const Lottery = await ethers.getContractFactory("Lottery");
+    const lottery = await Lottery.attach(address);
+    await lottery.startLottery();
+    console.log("Lottery started");
+  })
 
 /**
  * @type import('hardhat/config').HardhatUserConfig
