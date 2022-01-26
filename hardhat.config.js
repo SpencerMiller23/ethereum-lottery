@@ -12,6 +12,17 @@ task("startLottery", "Starts the lottery")
     console.log("Lottery started");
   })
 
+task("enterLottery", "Enters the lottery")
+  .addPositionalParam("address", "The address of the lottery contract")
+  .setAction(async (args) => {
+    const { address } = args;
+    const Lottery = await ethers.getContractFactory("Lottery");
+    const lottery = await Lottery.attach(address);
+    const value = await lottery.getEntranceFee();
+    await lottery.enter(overrides = {value: value});
+    console.log("Entered lottery");
+  })
+
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
