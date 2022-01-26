@@ -23,6 +23,22 @@ task("enterLottery", "Enters the lottery")
     console.log("Entered lottery");
   })
 
+task("fundWithLink", "Funds the lottery with LINK")
+  .addPositionalParam("contractAddress", "The address of the lottery contract")
+  .addPositionalParam("linkAddress", "The address of the LINK token")
+  .setAction(async (args) => {
+    const LinkToken = await ethers.getContractFactory("LinkToken");
+    const linkToken = await LinkToken.attach(args[1]);
+    await linkToken.transfer(args[0], 100000000000000000);
+    console.log("Funded lottery with LINK");
+  })
+
+task("endLottery", "Ends the lottery")
+  .addPositionalParam("address", "The address of the lottery contract")
+  .setAction(async (args) => {
+
+  })
+
 /**
  * @type import('hardhat/config').HardhatUserConfig
  */
