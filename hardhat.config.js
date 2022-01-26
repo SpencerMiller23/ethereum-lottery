@@ -27,16 +27,21 @@ task("fundWithLink", "Funds the lottery with LINK")
   .addPositionalParam("contractAddress", "The address of the lottery contract")
   .addPositionalParam("linkAddress", "The address of the LINK token")
   .setAction(async (args) => {
+    const { contractAddress, linkAddress } = args;
     const LinkToken = await ethers.getContractFactory("LinkToken");
-    const linkToken = await LinkToken.attach(args[1]);
-    await linkToken.transfer(args[0], 100000000000000000);
+    const linkToken = await LinkToken.attach(linkAddress);
+    await linkToken.transfer(contractAddress, 1000000000000000);
     console.log("Funded lottery with LINK");
   })
 
 task("endLottery", "Ends the lottery")
   .addPositionalParam("address", "The address of the lottery contract")
   .setAction(async (args) => {
-
+    const { address } = args;
+    const Lottery = await ethers.getContractFactory("Lottery");
+    const lottery = await Lottery.attach(address);
+    await lottery.endLottery();
+    console.log(lottery.recentWinner() + " won the lottery");
   })
 
 /**
