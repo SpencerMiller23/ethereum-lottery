@@ -40,8 +40,8 @@ task("endLottery", "Ends the lottery")
     const { address } = args;
     const Lottery = await ethers.getContractFactory("Lottery");
     const lottery = await Lottery.attach(address);
-    await lottery.endLottery();
-    console.log(lottery.recentWinner() + " won the lottery");
+    const winner = await lottery.endLottery();
+    console.log(winner + " won the lottery");
   })
 
 /**
