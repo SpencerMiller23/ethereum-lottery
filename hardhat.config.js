@@ -1,5 +1,5 @@
 require("@nomiclabs/hardhat-ethers")
-const { task } = require("hardhat/config");
+require("@nomiclabs/hardhat-waffle")
 let secrets = require("./secrets")
 
 task("startLottery", "Starts the lottery")
@@ -65,6 +65,7 @@ module.exports = {
     hardhat: {
       forking: {
         url: secrets.alchemyMainnetUrl,
+        gasLimit: 8000000,
       }
     },
     rinkeby: {

@@ -1,4 +1,8 @@
-This project is a blockchain-based lottery which allows users to enter by paying the entry fee of $50 USD. The winner is determined by obtaining a verifiably random number from a Chainlink oracle, and paying out the contract balance to the corresponding user. The purpose of this project is to practice using tools such as Hardhat, Chainlink and OpenZeppelin.
+# Ethereum Lottery
+
+## Overview
+
+This project is a blockchain-based lottery which allows users to enter by paying the entry fee of $50 USD. The winner is determined by obtaining a verifiably random number from a Chainlink oracle, and paying out the contract balance to the corresponding user. The purpose of this project is to gain experience with powerful tools such as [Hardhat](https://hardhat.org/), [Chainlink](https://chain.link/) and [OpenZeppelin](https://openzeppelin.com/).
 
 ## Setup
 
