@@ -65,7 +65,7 @@ module.exports = {
     hardhat: {
       forking: {
         url: secrets.alchemyMainnetUrl,
-        gasLimit: 8000000,
+        gas: 10000,
       }
     },
     rinkeby: {

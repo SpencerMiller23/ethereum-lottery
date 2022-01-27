@@ -1,7 +1,7 @@
 const { expect } = require("chai")
 const { ethers } = require("hardhat");
 
-describe("Lottery", function() {
+describe("Lottery unit test", function() {
     before(async function() {
         this.deployer = await ethers.getSigners();
         let price_feed_address;
@@ -18,9 +18,9 @@ describe("Lottery", function() {
         console.log("Mock price feed address: " + price_feed_address);
 
         const MockLinkToken = await ethers.getContractFactory("LinkToken");
-        const mockLinkToken = await MockLinkToken.deploy();
-        await mockLinkToken.deployed();
-        link_token = mockLinkToken.address;
+        this.mockLinkToken = await MockLinkToken.deploy();
+        await this.mockLinkToken.deployed();
+        link_token = this.mockLinkToken.address;
         console.log("Mock link token address: " + link_token);
 
         const MockVRFCoordinator = await ethers.getContractFactory("MockVRFCoordinator");
@@ -51,7 +51,14 @@ describe("Lottery", function() {
 
     it("Test if users can enter a lottery that is open", async function() {
         await this.lottery.startLottery();
-        await this.lottery.enter(overrides = {value: 0});
-        expect(await this.lottery.players[0]).to.equal(this.deployer);
+        await this.lottery.enter(overrides = {value: ethers.utils.parseUnits("5", 16)});
+        await expect(this.lottery.players[0]).to.equal(this.deployer.address);
+    });
+
+    it("Test if the contract owner can end the lottery", async function() {
+        await this.mockLinkToken.transfer(this.lottery.address, 1000000000000000);
+        await this.lottery.endLottery();
+        const lotteryState = await this.lottery.lotteryState();
+        await expect(lotteryState).to.equal(2);
     });
 });
