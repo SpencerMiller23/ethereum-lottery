@@ -70,7 +70,10 @@ module.exports = {
     },
     rinkeby: {
       url: secrets.alchemyRinkebyUrl,
-      accounts: [secrets.rinkebySecretKey]
+      accounts: [secrets.rinkebySecretKey],
+      timeout: 60000,
+      gas: 2100000,
+      gasPrice: 8000000000,
     }
   }
 };
