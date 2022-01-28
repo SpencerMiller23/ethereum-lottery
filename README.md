@@ -7,7 +7,7 @@ This project is a blockchain-based lottery which allows users to enter by paying
 ## Setup
 
 1) Clone the repository
-2) Run `npm run setup`
+2) Run `npm install`
 3) Create a `secrets.json` file with the following contents:
 ```
     {
