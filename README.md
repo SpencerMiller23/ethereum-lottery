@@ -9,11 +9,13 @@ This project is a blockchain-based lottery which allows users to enter by paying
 1) Clone the repository
 2) Run `npm run setup`
 3) Create a `secrets.json` file with the following contents:
+```
     {
         "alchemyMainnetUrl": "",
         "alchemyRinkebyUrl": "",
         "rinkebySecretKey": ""
     }
+```
 
 ## Deploying locally
 
