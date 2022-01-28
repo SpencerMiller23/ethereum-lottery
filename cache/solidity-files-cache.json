@@ -333,8 +333,8 @@
       ]
     },
     "C:\\Users\\spenc\\Desktop\\Coding\\Solidity\\lottery\\contracts\\Lottery.sol": {
-      "lastModificationDate": 1642451843417,
-      "contentHash": "ed54a2baad35d0823f8fa80739c268c0",
+      "lastModificationDate": 1643372072633,
+      "contentHash": "9b9bc21780a56becdf1e560d7965b12f",
       "sourceName": "contracts/Lottery.sol",
       "solcConfig": {
         "version": "0.8.0",

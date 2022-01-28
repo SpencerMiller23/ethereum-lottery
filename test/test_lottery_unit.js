@@ -1,4 +1,4 @@
-const { expect } = require("chai")
+const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
 describe("Lottery unit test", function() {
@@ -24,9 +24,9 @@ describe("Lottery unit test", function() {
         console.log("Mock link token address: " + link_token);
 
         const MockVRFCoordinator = await ethers.getContractFactory("MockVRFCoordinator");
-        const mockVRFCoordinator = await MockVRFCoordinator.deploy(link_token);
-        await mockVRFCoordinator.deployed();
-        vrf_coordinator = mockVRFCoordinator.address;
+        this.mockVRFCoordinator = await MockVRFCoordinator.deploy(link_token);
+        await this.mockVRFCoordinator.deployed();
+        vrf_coordinator = this.mockVRFCoordinator.address;
         console.log("Mock vrf coordinator address: " + vrf_coordinator);
         
         this.Lottery = await ethers.getContractFactory("Lottery");
@@ -50,15 +50,28 @@ describe("Lottery unit test", function() {
     });
 
     it("Test if users can enter a lottery that is open", async function() {
+        this.accounts = await hre.ethers.getSigners();
         await this.lottery.startLottery();
-        await this.lottery.enter(overrides = {value: ethers.utils.parseUnits("5", 16)});
+        await this.lottery.connect(this.accounts[0]).enter(overrides = {value: ethers.utils.parseUnits("5", 16)});
+        await this.lottery.connect(this.accounts[1]).enter(overrides = {value: ethers.utils.parseUnits("5", 16)});
+        await this.lottery.connect(this.accounts[2]).enter(overrides = {value: ethers.utils.parseUnits("5", 16)});
         await expect(this.lottery.players[0]).to.equal(this.deployer.address);
     });
 
-    it("Test if the contract owner can end the lottery", async function() {
+    it("Test if the winner is chosen correctly", async function() {
         await this.mockLinkToken.transfer(this.lottery.address, 1000000000000000);
-        await this.lottery.endLottery();
+        const tx = await this.lottery.endLottery();
         const lotteryState = await this.lottery.lotteryState();
         await expect(lotteryState).to.equal(2);
+
+        const receipt = await tx.wait();
+        const requestId = receipt.events[0].topics[1];
+        const STATIC_RNG = 345;
+        this.mockVRFCoordinator.callBackWithRandomness(requestId, STATIC_RNG, this.lottery.address);
+        // 345 % 3 = 0
+        const lotteryWinner = await this.lottery.latestWinner();
+        await expect(lotteryWinner).to.equal(this.accounts[0].address);
+        const balance = await ethers.provider.getBalance(this.lottery.address);
+        await expect(balance).to.equal(0);
     });
 });

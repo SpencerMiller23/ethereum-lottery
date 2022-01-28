@@ -21,6 +21,7 @@ contract Lottery is Ownable, VRFConsumerBase {
     bytes32 public keyhash;
     address payable public latestWinner;
     uint256 public latestRandomNumber;
+    event RequestedRandomNumber(bytes32 requestId);
 
     constructor(
         address _priceFeedAddress,
@@ -60,7 +61,8 @@ contract Lottery is Ownable, VRFConsumerBase {
     function endLottery() public onlyOwner {
         require(lotteryState == LOTTERY_STATE.OPEN, "Lottery is not open.");
         lotteryState = LOTTERY_STATE.CALCULATING_WINNER;
-        requestRandomness(keyhash, fee);
+        bytes32 requestId = requestRandomness(keyhash, fee);
+        emit RequestedRandomNumber(requestId);
     }
 
     // Callback function called by the VRF coordinator when the random number is returned.
